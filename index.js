@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 require('dotenv').config();
 const authRoutes = require("./routes/auth");
 const movieRoutes = require("./routes/movieRoutes");
-
+const preferencesRouter = require('./routes/preferences');
 
 const app = express();
 const PORT = 5000;
@@ -29,7 +29,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);       // Authentication routes
 app.use("/api/movies", movieRoutes);    // Movie and preference routes
-
+app.use("/api", preferencesRouter); 
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

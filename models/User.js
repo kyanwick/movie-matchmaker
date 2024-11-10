@@ -7,11 +7,17 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   preferences: {
-    genres: [String],         // Array of preferred genres
-    directors: [String],      // Array of favorite directors
-    moviesWatched: [String],  // Array of movie IDs the user has watched
+        genres: [String],         // Array of genre IDs
+        decade: String,           // E.g., "2010s"
+        pace: String,             // E.g., "Medium"
+        themes: [String],         // Array of theme/mood preferences
+        director: String,         // Director ID
+        length: String,           // Preferred movie length
+        language: String,         // E.g., "en"
+        franchise: Boolean,       // Franchise preference
+        blockbuster: Boolean      // Blockbuster vs. Indie preference
   },
 });
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+module.exports =  mongoose.model("User", userSchema);
+

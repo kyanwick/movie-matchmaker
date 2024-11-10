@@ -19,9 +19,9 @@ const authenticate = (req, res, next) => {
 };
 
 // Route to get movie recommendations based on user preferences
-router.get('/:userId', authenticate, async (req, res) => {  // Use userId as a route parameter
+router.get('/', authenticate, async (req, res) => {  // No need for :userId in the route
     try {
-        const user = await User.findById(req.params.userId);  // Access userId via req.params
+        const user = await User.findById(req.user.userId);  // Access userId from req.user
         if (!user) return res.status(404).json({ error: "User not found" });
 
         const { genres, directors } = user.preferences;  // Get user preferences
