@@ -13,7 +13,7 @@ function App() {
     password: ''
   });
   const [errors, setErrors] = useState({});
-  const [userId, setUserId] = useState(sessionStorage.getItem('userId') || '');
+  const [setUserId] = useState(sessionStorage.getItem('userId') || '');
   const navigate = useNavigate();
 
   const validateEmail = (email) => {

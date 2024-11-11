@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getTMDBRecommendations } from '../api';
-import { Star, Clock, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
+import { Star, Clock, Calendar } from 'lucide-react';
 
 const MovieRecommendations = () => {
   const [movies, setMovies] = useState([]);
