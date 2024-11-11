@@ -2,9 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
- "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",  
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node index.js",
+    "client": "npm start --prefix frontend", 
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -23,6 +25,8 @@
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "concurrently": "^7.0.0",
+    "serve": "^14.2.4"
   }
 }

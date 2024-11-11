@@ -3,95 +3,43 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import { registerUser, loginUser } from './api';
 import PreferencesForm from './components/PreferencesForm';
 import Recommendations from './components/Recommendations';
-import { AlertCircle } from 'lucide-react';
 
-function App() {
+// Separate the login/register component
+function AuthComponent() {
   const [isLoginView, setIsLoginView] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: ''
   });
-  const [errors, setErrors] = useState({});
-  const [setUserId] = useState(sessionStorage.getItem('userId') || '');
+  const [userId, setUserId] = useState(sessionStorage.getItem('userId') || '');
   const navigate = useNavigate();
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Username validation
-    if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
-    } else if (formData.username.length < 3) {
-      newErrors.username = 'Username must be at least 3 characters';
-    }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-
-    // Email validation (only for registration)
-    if (!isLoginView) {
-      if (!formData.email) {
-        newErrors.email = 'Email is required';
-      } else if (!validateEmail(formData.email)) {
-        newErrors.email = 'Please enter a valid email address';
-      }
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+    if (!e || !e.target) {
+      console.error('Event object is undefined');
+      return;
     }
+    
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleRegister = async () => {
-    if (!validateForm()) return;
-
     try {
       const response = await registerUser(formData);
       setUserId(response.data.userId);
       sessionStorage.setItem('userId', response.data.userId);
-      setIsLoginView(true);
-      setFormData(prev => ({
-        ...prev,
-        email: '' // Clear email when switching to login
-      }));
-      // Success message
-      alert("Account created successfully! Please login.");
+      setIsLoginView(true); // Switch to login view after successful registration
     } catch (error) {
       console.error("Registration failed:", error.response?.data || error.message);
-      setErrors(prev => ({
-        ...prev,
-        submit: error.response?.data?.message || "Registration failed. Please try again."
-      }));
+      alert("Registration failed.");
     }
   };
 
   const handleLogin = async () => {
-    if (!validateForm()) return;
-
     try {
       const response = await loginUser({
         username: formData.username,
@@ -105,21 +53,8 @@ function App() {
       }
     } catch (error) {
       console.error("Login failed:", error);
-      setErrors(prev => ({
-        ...prev,
-        submit: "Invalid username or password."
-      }));
+      alert("Login failed.");
     }
-  };
-
-  const handleViewSwitch = (isLogin) => {
-    setIsLoginView(isLogin);
-    setErrors({}); // Clear errors when switching views
-    setFormData({
-      username: '',
-      email: '',
-      password: ''
-    });
   };
 
   return (
@@ -140,7 +75,7 @@ function App() {
           {/* Toggle Buttons */}
           <div className="flex mb-8 bg-gray-700 rounded-lg p-1">
             <button
-              onClick={() => handleViewSwitch(true)}
+              onClick={() => setIsLoginView(true)}
               className={`flex-1 py-2 rounded-md transition-all duration-200 ${
                 isLoginView 
                   ? 'bg-blue-600 text-white' 
@@ -150,7 +85,7 @@ function App() {
               Login
             </button>
             <button
-              onClick={() => handleViewSwitch(false)}
+              onClick={() => setIsLoginView(false)}
               className={`flex-1 py-2 rounded-md transition-all duration-200 ${
                 !isLoginView 
                   ? 'bg-blue-600 text-white' 
@@ -160,14 +95,6 @@ function App() {
               Register
             </button>
           </div>
-
-          {/* Error Message */}
-          {errors.submit && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-2 text-red-500">
-              <AlertCircle className="w-5 h-5" />
-              <span>{errors.submit}</span>
-            </div>
-          )}
 
           {/* Form Fields */}
           <div className="space-y-4">
@@ -180,14 +107,9 @@ function App() {
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 rounded-lg bg-gray-700 border text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors ${
-                  errors.username ? 'border-red-500' : 'border-gray-600'
-                }`}
+                className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
                 placeholder="Enter your username"
               />
-              {errors.username && (
-                <p className="mt-1 text-sm text-red-500">{errors.username}</p>
-              )}
             </div>
 
             {!isLoginView && (
@@ -200,14 +122,9 @@ function App() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 rounded-lg bg-gray-700 border text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors ${
-                    errors.email ? 'border-red-500' : 'border-gray-600'
-                  }`}
+                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
                   placeholder="Enter your email"
                 />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                )}
               </div>
             )}
 
@@ -220,14 +137,9 @@ function App() {
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 rounded-lg bg-gray-700 border text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors ${
-                  errors.password ? 'border-red-500' : 'border-gray-600'
-                }`}
+                className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
                 placeholder="Enter your password"
               />
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-              )}
             </div>
 
             <button
@@ -244,7 +156,7 @@ function App() {
               <>
                 New to Movie Matchmaker?{' '}
                 <button
-                  onClick={() => handleViewSwitch(false)}
+                  onClick={() => setIsLoginView(false)}
                   className="text-blue-400 hover:text-blue-300"
                 >
                   Create an account
@@ -254,7 +166,7 @@ function App() {
               <>
                 Already have an account?{' '}
                 <button
-                  onClick={() => handleViewSwitch(true)}
+                  onClick={() => setIsLoginView(true)}
                   className="text-blue-400 hover:text-blue-300"
                 >
                   Login here
@@ -268,11 +180,12 @@ function App() {
   );
 }
 
-export default function MainApp() {
+// Main App component with Router
+export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<AuthComponent />} />
         <Route path="/preferences" element={<PreferencesForm />} />
         <Route path="/recommendations" element={<Recommendations />} />
       </Routes>

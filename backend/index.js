@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware for parsing JSON and enabling CORS
 app.use(bodyParser.json());
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Update this to your deployed frontend URL
+    origin: process.env.FRONTEND_URL || 'https://movie-recommender-app.azurewebsites.net/', // Update this to your deployed frontend URL
     credentials: true,
 }));
 
