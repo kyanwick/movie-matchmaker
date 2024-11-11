@@ -68,6 +68,9 @@ function AuthComponent() {
           <p className="text-gray-400 text-lg">
             Discover your next favorite film
           </p>
+          <p className="text-gray-400 text-lg">
+            Made by Kyan Oberas
+          </p>
         </div>
 
         {/* Card Container */}

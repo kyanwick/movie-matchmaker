@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const API_URL = process.env.NODE_ENV === 'production' 
-    ? "https://movie-recommender-app.azurewebsites.net/api"  // For production, use the full API URL
-    : "http://localhost:5000/api";  // For development, use local server URL
+    ? "https://movie-recommender-app.azurewebsites.net/api"  // for when up on azure
+    : "http://localhost:5000/api";  // for development
 
 
-const TMDB_API_KEY = "8f3598bc72027d07fc2e2a283b146997"; // Replace with your TMDb API key
+const TMDB_API_KEY = "8f3598bc72027d07fc2e2a283b146997"; // i dont care it's free anyways
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3/discover/movie';
 
 
@@ -21,7 +21,7 @@ export const loginUser = async (userData) => {
 
 // Save user preferences
 export const savePreferences = async (userId, preferences) => {
-    const token = sessionStorage.getItem('token'); // Retrieve token from sessionStorage
+    const token = sessionStorage.getItem('token'); 
 
     if (!token) {
         console.error('No token found');
@@ -33,7 +33,7 @@ export const savePreferences = async (userId, preferences) => {
         preferences,   // Only send preferences, no need for userId here as it is inferred from the token
       }, {
         headers: {
-            'Authorization': `Bearer ${token}` // Include token
+            'Authorization': `Bearer ${token}` 
         }
       });
       return response.data;
@@ -42,7 +42,6 @@ export const savePreferences = async (userId, preferences) => {
       throw error;
     }
 };
-
 
 // Get user preferences
 export const getUserPreferences = async () => {
@@ -54,7 +53,7 @@ export const getUserPreferences = async () => {
     }
 
     try {
-      const response = await axios.get(`${API_URL}/preferences`, {   // Change to /preferences (not /preferences/:userId)
+      const response = await axios.get(`${API_URL}/preferences`, {  
         headers: {
             'Authorization': `Bearer ${token}` // Include token
         }
@@ -72,7 +71,7 @@ const mapPreferencesToTMDBParams = (preferences) => {
         api_key: TMDB_API_KEY,
         language: preferences.language !== 'no-preference' ? preferences.language : 'en',  // Default to English if no preference
         sort_by: 'popularity.desc',  // Sorting by popularity (most popular movies)
-        page: 1,  // Start with page 1 (pagination can be added later if needed)
+        page: 1,  
     };
 
     // Genre filter (convert array of genres to comma-separated string)
@@ -160,9 +159,6 @@ export const getTMDBRecommendations = async (preferences, maxPages = 5) => {
     }
 };
 
-
-
-
 // Fetch movie recommendations based on preferences
 export const getRecommendations = async (preferences) => {
     try {
@@ -181,7 +177,7 @@ export const getRecommendations = async (preferences) => {
                     api_key: TMDB_API_KEY,
                     language: 'en',
                     sort_by: 'popularity.desc', // Sort by popularity
-                    page: 1,  // Fetch from the first page
+                    page: 1,  
                 }
             });
             return fallbackResponse.data.results; // Return random movies
