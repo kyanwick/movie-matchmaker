@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = "https://movie-recommender-app.azurewebsites.net/api"; 
-
+const API_URL = "http://localhost:5000/api"; // Replace with deployed URL when deployed
+// https://movie-recommender-app.azurewebsites.net/api
 
 const TMDB_API_KEY = "8f3598bc72027d07fc2e2a283b146997"; // Replace with your TMDb API key
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3/discover/movie';

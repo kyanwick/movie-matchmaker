@@ -7,9 +7,21 @@ require('dotenv').config();
 const authRoutes = require("./routes/auth");
 const movieRoutes = require("./routes/movieRoutes");
 const preferencesRouter = require('./routes/preferences');
+const path = require('path');
 
 const app = express();
 const PORT = 5000;
+
+// Serve static files from the 'public' directory (where frontend build is)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch-all route to serve the React app for all non-API requests
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const port = process.env.PORT || 5001;
+app.listen(port, () => console.log(`Server is running on port ${port}`));
 
 // Enable CORS to allow requests from frontend
 app.use(cors({
