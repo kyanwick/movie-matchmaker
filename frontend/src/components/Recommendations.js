@@ -5,7 +5,7 @@ import { Star, Clock, Calendar } from 'lucide-react';
 const MovieRecommendations = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expandedCards, setExpandedCards] = useState({});
+  const [expandedCards] = useState({});
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -26,12 +26,6 @@ const MovieRecommendations = () => {
     fetchMovies();
   }, []);
 
-  const toggleExpand = (movieId) => {
-    setExpandedCards(prev => ({
-      ...prev,
-      [movieId]: !prev[movieId]
-    }));
-  };
 
   if (loading) {
     return (
