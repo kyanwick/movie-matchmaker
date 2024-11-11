@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const API_URL = process.env.NODE_ENV === 'production' 
-    ? "/api"  // For production, use relative API URL
-    : "http://localhost:5000/api";  // For development, use full URL
+    ? "https://movie-recommender-app.azurewebsites.net/api"  // For production, use the full API URL
+    : "http://localhost:5000/api";  // For development, use local server URL
+
 
 const TMDB_API_KEY = "8f3598bc72027d07fc2e2a283b146997"; // Replace with your TMDb API key
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3/discover/movie';
