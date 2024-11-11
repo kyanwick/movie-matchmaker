@@ -2,7 +2,7 @@
 
 A full-stack web application that provides personalized movie recommendations based on user preferences using The Movie Database (TMDb) API. Built with React, Express.js, MongoDB, and Tailwind CSS.
 
-![Movie Recommendation App](./screenshots/app-preview.png)
+![Movie Recommendation App](./screenshot.png)
 
 ## 🌟 Features
 
